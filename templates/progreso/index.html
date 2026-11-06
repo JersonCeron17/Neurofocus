@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Mi Progreso Diario — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 850px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h2>Mi Progreso Diario</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Métricas de tareas completadas, minutos de estudio y ejercicios realizados.</p>
+        </div>
+        <a href="{{ url_for('main.dashboard') }}" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 500;">
+            ← Volver al Panel
+        </a>
+    </div>
+
+    <!-- Progreso de Hoy -->
+    <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #EEF2FF, #F5F3FF); border: 1px solid #C7D2FE;">
+        <h3 style="margin-bottom: 1rem; color: #4338CA;">Resumen de Hoy ({{ fecha_hoy }})</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; text-align: center;">
+            <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
+                <span style="font-size: 2rem; font-weight: 700; color: #4F46E5;">
+                    {{ progreso_hoy.tareas_completadas if progreso_hoy else 0 }}
+                </span>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.35rem;">Tareas Completadas</p>
+            </div>
+
+            <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
+                <span style="font-size: 2rem; font-weight: 700; color: #059669;">
+                    {{ progreso_hoy.minutos_estudio if progreso_hoy else 0 }}
+                </span>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.35rem;">Minutos de Estudio</p>
+            </div>
+
+            <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
+                <span style="font-size: 2rem; font-weight: 700; color: #D97706;">
+                    {{ progreso_hoy.ejercicios_completados if progreso_hoy else 0 }}
+                </span>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.35rem;">Ejercicios Cognitivos</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario para Registrar / Actualizar Progreso -->
+    <div class="card" style="margin-bottom: 2.5rem;">
+        <h3 style="margin-bottom: 1.25rem; font-size: 1.15rem; color: var(--text);">Registrar / Actualizar Métricas del Día</h3>
+        <form method="POST" action="{{ url_for('progress.actualizar') }}">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="fecha">Fecha *</label>
+                    <input type="date" id="fecha" name="fecha" value="{{ fecha_hoy }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="tareas_completadas">Tareas completadas</label>
+                    <input type="number" id="tareas_completadas" name="tareas_completadas" min="0" value="{{ progreso_hoy.tareas_completadas if progreso_hoy else 0 }}" required>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="minutos_estudio">Minutos de estudio</label>
+                    <input type="number" id="minutos_estudio" name="minutos_estudio" min="0" value="{{ progreso_hoy.minutos_estudio if progreso_hoy else 0 }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="ejercicios_completados">Ejercicios completados</label>
+                    <input type="number" id="ejercicios_completados" name="ejercicios_completados" min="0" value="{{ progreso_hoy.ejercicios_completados if progreso_hoy else 0 }}" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary" style="margin-top: 0.5rem;">
+                Guardar Progreso
+            </button>
+        </form>
+    </div>
+
+    <!-- Historial de Progreso -->
+    <div>
+        <h3 style="margin-bottom: 1rem; font-size: 1.15rem; color: var(--text);">Historial de Progreso ({{ historial|length }})</h3>
+
+        {% if not historial %}
+            <div class="card" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <p style="font-size: 1.05rem; margin-bottom: 0.5rem;">No tienes registros de progreso diario aún.</p>
+                <p style="font-size: 0.9rem;">Usa el formulario superior para registrar tus métricas de hoy.</p>
+            </div>
+        {% else %}
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                {% for p in historial %}
+                    <div class="card" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4 style="font-size: 1.1rem; margin-bottom: 0.25rem;">{{ p.fecha }}</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">
+                                <strong>Tareas:</strong> {{ p.tareas_completadas }} | 
+                                <strong>Estudio:</strong> {{ p.minutos_estudio }} min | 
+                                <strong>Ejercicios:</strong> {{ p.ejercicios_completados }}
+                            </p>
+                        </div>
+
+                        <a href="{{ url_for('progress.detalle', id_progreso=p.id_progreso) }}" style="color: var(--primary); font-weight: 500; font-size: 0.9rem; text-decoration: none;">
+                            Ver Detalle →
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

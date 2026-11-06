@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}NeuroFocus — Plataforma Educativa de Concentración y Organización{% endblock %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; gap: 3rem;">
+    <!-- Sección Hero -->
+    <div class="card" style="text-align: center; padding: 4rem 2rem; background: radial-gradient(circle at center, #FFFFFF 0%, #F8FAFC 100%); border: 1px solid var(--border);">
+        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary-light); color: var(--primary); padding: 0.35rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; border: 1px solid #C7D2FE;">
+            Enfoque Neurocognitivo & Organización Académica
+        </div>
+
+        <h1 style="font-size: 2.75rem; line-height: 1.2; margin-bottom: 1.25rem; letter-spacing: -0.03em;">
+            Potencia tu estudio con <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">NeuroFocus</span>
+        </h1>
+
+        <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.6; max-width: 680px; margin: 0 auto 2.5rem;">
+            Diseñado para estudiantes y docentes: planifica tareas académicas, gestiona bloques de estudio de alta concentración y entrena tu memoria y atención selectiva.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('main.dashboard') }}" class="btn-primary" style="font-size: 1.05rem; padding: 0.85rem 2rem;">
+                    Ir a Mi Panel de Control →
+                </a>
+            {% else %}
+                <a href="{{ url_for('auth.registro') }}" class="btn-primary" style="font-size: 1.05rem; padding: 0.85rem 2rem;">
+                    Comenzar Gratis
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn-secondary" style="font-size: 1.05rem; padding: 0.85rem 2rem;">
+                    Iniciar Sesión
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Módulos y Capacidades del Sistema -->
+    <div>
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2>Diseñado para potenciar el rendimiento académico</h2>
+            <p style="color: var(--text-muted); font-size: 1rem;">Seis pilares integrados en una misma plataforma educativa.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <!-- Pilar 1 -->
+            <div class="card card-interactive">
+                <div style="width: 48px; height: 48px; background: var(--primary-light); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 11 12 14 22 4"></polyline>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </div>
+                <h3>Gestión Inteligente de Tareas</h3>
+                <p style="font-size: 0.92rem; margin-top: 0.5rem; line-height: 1.5;">
+                    Prioriza entregas según urgencia, categoriza por nivel de esfuerzo y da seguimiento visual al estado de tus actividades académicas.
+                </p>
+            </div>
+
+            <!-- Pilar 2 -->
+            <div class="card card-interactive">
+                <div style="width: 48px; height: 48px; background: var(--secondary-light); color: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <h3>Calendario Académico</h3>
+                <p style="font-size: 0.92rem; margin-top: 0.5rem; line-height: 1.5;">
+                    Organiza tus horarios de estudio, exámenes y entregas con vinculación directa entre eventos y tareas pendientes.
+                </p>
+            </div>
+
+            <!-- Pilar 3 -->
+            <div class="card card-interactive">
+                <div style="width: 48px; height: 48px; background: var(--emerald-light); color: var(--emerald); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <h3>Sesiones de Alta Concentración</h3>
+                <p style="font-size: 0.92rem; margin-top: 0.5rem; line-height: 1.5;">
+                    Bloques de estudio con intervalos de pausa estructurados para evitar la fatiga mental y maximizar la retención cognitiva.
+                </p>
+            </div>
+
+            <!-- Pilar 4 -->
+            <div class="card card-interactive">
+                <div style="width: 48px; height: 48px; background: var(--blue-light); color: var(--blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </div>
+                <h3>Entrenamiento Cognitivo</h3>
+                <p style="font-size: 0.92rem; margin-top: 0.5rem; line-height: 1.5;">
+                    Ejercicios interactivos basados en pruebas de inhibición y memoria de trabajo para ejercitar el control atencional.
+                </p>
+            </div>
+
+            <!-- Pilar 5 -->
+            <div class="card card-interactive">
+                <div style="width: 48px; height: 48px; background: var(--amber-light); color: var(--amber); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <h3>Monitoreo de Progreso Diario</h3>
+                <p style="font-size: 0.92rem; margin-top: 0.5rem; line-height: 1.5;">
+                    Métricas diarias consolidadas para evaluar el volumen de trabajo académico, tiempo de estudio y constancia a lo largo de las semanas.
+                </p>
+            </div>
+
+            <!-- Pilar 6 -->
+            <div class="card card-interactive">
+                <div style="width: 48px; height: 48px; background: var(--purple-light); color: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                        <path d="M4 22h16"></path>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                    </svg>
+                </div>
+                <h3>Sistema de Logros Educativos</h3>
+                <p style="font-size: 0.92rem; margin-top: 0.5rem; line-height: 1.5;">
+                    Recompensas visuales y medallas por hitos alcanzados para reforzar el hábito y la disciplina de estudio continuo.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

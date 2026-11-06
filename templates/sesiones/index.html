@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Sesiones de Estudio — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 850px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h2>Sesiones de Estudio</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Registra y gestiona tus bloques de concentración y descansos.</p>
+        </div>
+        <a href="{{ url_for('main.dashboard') }}" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 500;">
+            ← Volver al Panel
+        </a>
+    </div>
+
+    <!-- Formulario para Registrar / Iniciar Sesión -->
+    <div class="card" style="margin-bottom: 2.5rem;">
+        <h3 style="margin-bottom: 1.25rem; font-size: 1.15rem; color: var(--text);">Nueva Sesión de Estudio</h3>
+        <form method="POST" action="{{ url_for('sessions.crear') }}">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="duracion_minutos">Duración de enfoque (minutos) *</label>
+                    <input type="number" id="duracion_minutos" name="duracion_minutos" min="1" value="{{ form_data.duracion_minutos if form_data else '25' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tiempo_pausa_minutos">Tiempo de pausa (minutos)</label>
+                    <input type="number" id="tiempo_pausa_minutos" name="tiempo_pausa_minutos" min="0" value="{{ form_data.tiempo_pausa_minutos if form_data else '5' }}">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="estado">Estado inicial</label>
+                    <select id="estado" name="estado" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem;">
+                        {% for e in estados %}
+                            <option value="{{ e }}" {% if form_data and form_data.estado == e %}selected{% elif not form_data and e == 'completada' %}selected{% endif %}>
+                                {{ e|replace('_', ' ')|capitalize }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_tarea">Vincular a Tarea (opcional)</label>
+                    <select id="id_tarea" name="id_tarea" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem;">
+                        <option value="">-- Ninguna --</option>
+                        {% for tar in tareas %}
+                            <option value="{{ tar.id_tarea }}" {% if form_data and form_data.id_tarea == tar.id_tarea|string %}selected{% endif %}>
+                                {{ tar.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="notas">Notas de la sesión (opcional)</label>
+                <input type="text" id="notas" name="notas" placeholder="Observaciones o resumen del bloque de estudio..." value="{{ form_data.notas if form_data else '' }}">
+            </div>
+
+            <button type="submit" class="btn-primary" style="margin-top: 0.5rem;">
+                + Registrar Sesión
+            </button>
+        </form>
+    </div>
+
+    <!-- Listado de Sesiones -->
+    <div>
+        <h3 style="margin-bottom: 1rem; font-size: 1.15rem; color: var(--text);">Historial de Sesiones ({{ sesiones|length }})</h3>
+
+        {% if not sesiones %}
+            <div class="card" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <p style="font-size: 1.05rem; margin-bottom: 0.5rem;">Aún no has registrado sesiones de estudio.</p>
+                <p style="font-size: 0.9rem;">Comienza una nueva sesión utilizando el formulario de arriba.</p>
+            </div>
+        {% else %}
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                {% for s in sesiones %}
+                    <div class="card" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="flex: 1; padding-right: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+                                <h4 style="font-size: 1.05rem;">
+                                    Sesión: {{ s.duracion_minutos }} min (Pausa: {{ s.tiempo_pausa_minutos }} min)
+                                </h4>
+
+                                <!-- Badge Estado -->
+                                {% if s.estado == 'completada' %}
+                                    <span style="background: #D1FAE5; color: #065F46; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 9999px;">Completada</span>
+                                {% elif s.estado == 'en_curso' %}
+                                    <span style="background: #DBEAFE; color: #1E40AF; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 9999px;">En curso</span>
+                                {% elif s.estado == 'planificada' %}
+                                    <span style="background: #FEF3C7; color: #92400E; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 9999px;">Planificada</span>
+                                {% else %}
+                                    <span style="background: #FEE2E2; color: #991B1B; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 9999px;">Cancelada</span>
+                                {% endif %}
+
+                                {% if s.tarea_nombre %}
+                                    <span style="background: #ECFDF5; color: #047857; font-size: 0.75rem; font-weight: 500; padding: 0.2rem 0.6rem; border-radius: 9999px; border: 1px solid #A7F3D0;">
+                                        Tarea: {{ s.tarea_nombre }}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            {% if s.notas %}
+                                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 0.5rem; line-height: 1.4;">
+                                    {{ s.notas }}
+                                </p>
+                            {% endif %}
+
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">
+                                <strong>Inicio:</strong> {{ s.fecha_inicio.strftime('%Y-%m-%d %H:%M') if s.fecha_inicio.strftime is defined else s.fecha_inicio }}
+                                {% if s.fecha_fin %}
+                                    | <strong>Fin:</strong> {{ s.fecha_fin.strftime('%Y-%m-%d %H:%M') if s.fecha_fin.strftime is defined else s.fecha_fin }}
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <!-- Acciones -->
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            {% if s.estado != 'completada' and s.estado != 'cancelada' %}
+                                <form method="POST" action="{{ url_for('sessions.finalizar', id_sesion=s.id_sesion) }}" style="margin: 0;">
+                                    <button type="submit" style="background: #10B981; color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                        ✓ Finalizar
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            <form method="POST" action="{{ url_for('sessions.eliminar', id_sesion=s.id_sesion) }}" style="margin: 0;" onsubmit="return confirm('¿Eliminar registro de esta sesión?');">
+                                <button type="submit" style="background: #EF4444; color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

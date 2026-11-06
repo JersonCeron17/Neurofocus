@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ actividad.titulo }} — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>Detalle de Actividad</h2>
+        <a href="{{ url_for('calendar.index') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+            ← Volver al Calendario
+        </a>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem;">{{ actividad.titulo }}</h3>
+            <span style="font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px; background: #EEF2FF; color: var(--primary);">
+                {{ actividad.tipo|capitalize }}
+            </span>
+        </div>
+
+        {% if actividad.descripcion %}
+            <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+                {{ actividad.descripcion }}
+            </p>
+        {% endif %}
+
+        <div style="background: #F9FAFB; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
+            <p style="margin-bottom: 0.5rem;"><strong>Fecha de Inicio:</strong> {{ actividad.fecha_inicio }}</p>
+            {% if actividad.fecha_fin %}
+                <p style="margin-bottom: 0.5rem;"><strong>Fecha de Fin:</strong> {{ actividad.fecha_fin }}</p>
+            {% endif %}
+            {% if actividad.tarea_nombre %}
+                <p style="margin-bottom: 0.5rem;"><strong>Tarea Vinculada:</strong> {{ actividad.tarea_nombre }}</p>
+            {% endif %}
+            <p><strong>Fecha de Creación:</strong> {{ actividad.fecha_creacion }}</p>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{{ url_for('calendar.editar', id_actividad=actividad.id_actividad) }}" class="btn-primary" style="text-align: center; text-decoration: none; flex: 1;">
+                Editar Actividad
+            </a>
+            <form method="POST" action="{{ url_for('calendar.eliminar', id_actividad=actividad.id_actividad) }}" style="margin: 0;" onsubmit="return confirm('¿Eliminar esta actividad?');">
+                <button type="submit" style="background: #EF4444; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+                    Eliminar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Resultado — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>Detalle de Resultado</h2>
+        <a href="{{ url_for('exercises.mis_resultados') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+            ← Volver a Mis Resultados
+        </a>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+            <div>
+                <h3 style="font-size: 1.25rem;">{{ resultado.ejercicio_titulo }}</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+                    Categoría: {{ resultado.categoria|capitalize }} | Dificultad: {{ resultado.dificultad|capitalize }}
+                </p>
+            </div>
+            <span style="font-size: 1.2rem; font-weight: 700; color: #059669; background: #D1FAE5; padding: 0.35rem 0.85rem; border-radius: 8px;">
+                {{ resultado.puntuacion }} pts
+            </span>
+        </div>
+
+        <div style="background: #F9FAFB; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
+            <p style="margin-bottom: 0.5rem;"><strong>ID de Resultado:</strong> #{{ resultado.id_resultado }}</p>
+            <p style="margin-bottom: 0.5rem;"><strong>Tiempo empleado:</strong> {{ resultado.tiempo_segundos if resultado.tiempo_segundos else 'No especificado' }} segundos</p>
+            <p><strong>Fecha y hora de realización:</strong> {{ resultado.fecha_realizacion }}</p>
+        </div>
+
+        <a href="{{ url_for('exercises.detalle', id_ejercicio=resultado.id_ejercicio) }}" class="btn-primary" style="text-align: center; text-decoration: none; display: block;">
+            Repetir Ejercicio
+        </a>
+    </div>
+</div>
+{% endblock %}

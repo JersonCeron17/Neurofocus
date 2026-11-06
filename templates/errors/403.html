@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}403 Acceso Denegado — NeuroFocus{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align: center; padding: 3rem 2rem;">
+    <div style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;">403</div>
+    <h2 style="margin-bottom: 0.75rem;">Acceso Restringido</h2>
+    <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 2rem;">
+        No cuentas con los permisos necesarios para acceder a este recurso.<br>
+        Tu rol actual no está autorizado para esta sección del sistema.
+    </p>
+
+    <div>
+        {% if session.get('user_id') %}
+            <a href="{{ url_for('main.dashboard') }}" class="btn-primary" style="display: inline-block; width: auto; padding: 0.75rem 1.5rem; text-decoration: none;">
+                Volver a Mi Panel
+            </a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}" class="btn-primary" style="display: inline-block; width: auto; padding: 0.75rem 1.5rem; text-decoration: none;">
+                Iniciar Sesión
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

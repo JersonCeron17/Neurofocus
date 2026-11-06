@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ ejercicio.titulo }} — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 650px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>{{ ejercicio.titulo }}</h2>
+        <a href="{{ url_for('exercises.index') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+            ← Volver a Ejercicios
+        </a>
+    </div>
+
+    <div class="card" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+            <span style="background: #EEF2FF; color: var(--primary); font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">
+                Categoría: {{ ejercicio.categoria|capitalize }}
+            </span>
+            <span style="background: #FEF3C7; color: #92400E; font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px;">
+                Dificultad: {{ ejercicio.dificultad|capitalize }}
+            </span>
+        </div>
+
+        <p style="color: var(--text); line-height: 1.6; margin-bottom: 1.5rem;">
+            {{ ejercicio.descripcion }}
+        </p>
+
+        <!-- Prueba interactiva funcional sencilla -->
+        <div style="background: #F3F4F6; padding: 1.5rem; border-radius: 8px; text-align: center; margin-bottom: 1.5rem;">
+            <div id="test-area">
+                <p style="font-size: 1.1rem; font-weight: 600; color: #4F46E5; margin-bottom: 0.5rem;">
+                    Desafío de Concentración
+                </p>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    Presiona "Completar Sesión del Ejercicio" para registrar tu puntaje y tiempo de ejecución.
+                </p>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('exercises.registrar_resultado', id_ejercicio=ejercicio.id_ejercicio) }}">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label for="puntuacion">Puntuación lograda (0 - 100) *</label>
+                    <input type="number" id="puntuacion" name="puntuacion" min="0" max="100" value="85" required>
+                </div>
+                <div class="form-group">
+                    <label for="tiempo_segundos">Tiempo invertido (segundos)</label>
+                    <input type="number" id="tiempo_segundos" name="tiempo_segundos" min="0" value="60">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                Guardar Resultado del Ejercicio
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

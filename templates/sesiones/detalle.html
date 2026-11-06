@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Sesión — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>Detalle de Sesión</h2>
+        <a href="{{ url_for('sessions.index') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+            ← Volver a Sesiones
+        </a>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem;">Sesión #{{ sesion.id_sesion }}</h3>
+            <span style="font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px; background: #EEF2FF; color: var(--primary);">
+                {{ sesion.estado|replace('_', ' ')|capitalize }}
+            </span>
+        </div>
+
+        <div style="background: #F9FAFB; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
+            <p style="margin-bottom: 0.5rem;"><strong>Duración de enfoque:</strong> {{ sesion.duracion_minutos }} minutos</p>
+            <p style="margin-bottom: 0.5rem;"><strong>Tiempo de pausa:</strong> {{ sesion.tiempo_pausa_minutos }} minutos</p>
+            <p style="margin-bottom: 0.5rem;"><strong>Fecha de Inicio:</strong> {{ sesion.fecha_inicio }}</p>
+            {% if sesion.fecha_fin %}
+                <p style="margin-bottom: 0.5rem;"><strong>Fecha de Fin:</strong> {{ sesion.fecha_fin }}</p>
+            {% endif %}
+            {% if sesion.tarea_nombre %}
+                <p style="margin-bottom: 0.5rem;"><strong>Tarea Vinculada:</strong> {{ sesion.tarea_nombre }}</p>
+            {% endif %}
+            {% if sesion.notas %}
+                <p><strong>Notas:</strong> {{ sesion.notas }}</p>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+            {% if sesion.estado != 'completada' and sesion.estado != 'cancelada' %}
+                <form method="POST" action="{{ url_for('sessions.finalizar', id_sesion=sesion.id_sesion) }}" style="margin: 0; flex: 1;">
+                    <button type="submit" style="width: 100%; background: #10B981; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+                        ✓ Finalizar Sesión
+                    </button>
+                </form>
+            {% endif %}
+            <form method="POST" action="{{ url_for('sessions.eliminar', id_sesion=sesion.id_sesion) }}" style="margin: 0;" onsubmit="return confirm('¿Eliminar esta sesión?');">
+                <button type="submit" style="background: #EF4444; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+                    Eliminar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

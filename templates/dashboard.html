@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Control — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; gap: 2rem;">
+    <!-- Banner de Bienvenida -->
+    <div class="card" style="background: linear-gradient(135deg, #1E1B4B, #312E81); color: white; border: none; padding: 2.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                    <h1 style="color: white; font-size: 1.85rem;">¡Hola, {{ nombre }}!</h1>
+                    <span style="background: rgba(255,255,255,0.15); color: #E0E7FF; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.82rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.2);">
+                        Rol: {{ rol|capitalize }}
+                    </span>
+                </div>
+                <p style="color: #C7D2FE; font-size: 0.95rem; max-width: 600px; line-height: 1.5;">
+                    Bienvenido a tu centro principal de NeuroFocus. Organiza tus actividades académicas, fortalece tu enfoque cognitivo y monitorea tu progreso diario.
+                </p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: #E0E7FF; border: 1px solid rgba(255,255,255,0.15);">
+                <p><strong>Usuario:</strong> {{ correo }}</p>
+                <p style="margin-top: 0.25rem; color: #A7F3D0;"><strong>Estado:</strong> Sesión Activa</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen Ejecutivo: Tarjetas de Métricas -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+        <!-- Tarjeta Tareas -->
+        <div class="card card-interactive" style="border-left: 4px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="color: var(--text-muted); font-size: 0.88rem; font-weight: 600;">Tareas Pendientes</span>
+                <span class="badge badge-indigo">{{ tareas_pendientes }} activas</span>
+            </div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--text);">{{ tareas_pendientes }}</div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                {{ tareas_completadas }} tareas completadas en total
+            </p>
+            <div style="margin-top: 1rem;">
+                <a href="{{ url_for('tasks.index') }}" style="color: var(--primary); font-size: 0.88rem; font-weight: 600; text-decoration: none;">
+                    Gestionar Tareas →
+                </a>
+            </div>
+        </div>
+
+        <!-- Tarjeta Calendario -->
+        <div class="card card-interactive" style="border-left: 4px solid var(--secondary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="color: var(--text-muted); font-size: 0.88rem; font-weight: 600;">Calendario</span>
+                <span class="badge badge-purple">{{ total_actividades }} actividades</span>
+            </div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--text);">{{ total_actividades }}</div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Eventos y sesiones programadas
+            </p>
+            <div style="margin-top: 1rem;">
+                <a href="{{ url_for('calendar.index') }}" style="color: var(--secondary); font-size: 0.88rem; font-weight: 600; text-decoration: none;">
+                    Ver Calendario →
+                </a>
+            </div>
+        </div>
+
+        <!-- Tarjeta Sesiones de Estudio -->
+        <div class="card card-interactive" style="border-left: 4px solid var(--emerald);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="color: var(--text-muted); font-size: 0.88rem; font-weight: 600;">Tiempo de Estudio</span>
+                <span class="badge badge-emerald">{{ total_sesiones }} sesiones</span>
+            </div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--text);">{{ minutos_estudio_total }} <span style="font-size: 1rem; font-weight: 500; color: var(--text-muted);">min</span></div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Minutos acumulados de concentración
+            </p>
+            <div style="margin-top: 1rem;">
+                <a href="{{ url_for('sessions.index') }}" style="color: var(--emerald); font-size: 0.88rem; font-weight: 600; text-decoration: none;">
+                    Iniciar Sesión →
+                </a>
+            </div>
+        </div>
+
+        <!-- Tarjeta Logros -->
+        <div class="card card-interactive" style="border-left: 4px solid var(--amber);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="color: var(--text-muted); font-size: 0.88rem; font-weight: 600;">Insignias y Logros</span>
+                <span class="badge badge-amber">{{ logros_desbloqueados }}/{{ total_logros }}</span>
+            </div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--text);">{{ logros_desbloqueados }}</div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Logros desbloqueados hasta ahora
+            </p>
+            <div style="margin-top: 1rem;">
+                <a href="{{ url_for('achievements.index') }}" style="color: var(--amber); font-size: 0.88rem; font-weight: 600; text-decoration: none;">
+                    Ver Mis Logros →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accesos Rápidos a Módulos Principales -->
+    <div>
+        <h3 style="margin-bottom: 1rem;">Módulos de NeuroFocus</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+            <a href="{{ url_for('tasks.index') }}" class="card card-interactive" style="text-decoration: none; text-align: center; padding: 1.5rem 1rem;">
+                <div style="width: 44px; height: 44px; background: var(--primary-light); color: var(--primary); border-radius: 10px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 11 12 14 22 4"></polyline>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </div>
+                <h4 style="font-size: 1rem; color: var(--text); margin-bottom: 0.25rem;">Mis Tareas</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Organización y prioridad</p>
+            </a>
+
+            <a href="{{ url_for('calendar.index') }}" class="card card-interactive" style="text-decoration: none; text-align: center; padding: 1.5rem 1rem;">
+                <div style="width: 44px; height: 44px; background: var(--secondary-light); color: var(--secondary); border-radius: 10px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <h4 style="font-size: 1rem; color: var(--text); margin-bottom: 0.25rem;">Calendario</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Planificación semanal</p>
+            </a>
+
+            <a href="{{ url_for('sessions.index') }}" class="card card-interactive" style="text-decoration: none; text-align: center; padding: 1.5rem 1rem;">
+                <div style="width: 44px; height: 44px; background: var(--emerald-light); color: var(--emerald); border-radius: 10px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <h4 style="font-size: 1rem; color: var(--text); margin-bottom: 0.25rem;">Sesiones</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Bloques de estudio</p>
+            </a>
+
+            <a href="{{ url_for('exercises.index') }}" class="card card-interactive" style="text-decoration: none; text-align: center; padding: 1.5rem 1rem;">
+                <div style="width: 44px; height: 44px; background: var(--blue-light); color: var(--blue); border-radius: 10px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </div>
+                <h4 style="font-size: 1rem; color: var(--text); margin-bottom: 0.25rem;">Ejercicios</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Foco y atención</p>
+            </a>
+
+            <a href="{{ url_for('progress.index') }}" class="card card-interactive" style="text-decoration: none; text-align: center; padding: 1.5rem 1rem;">
+                <div style="width: 44px; height: 44px; background: var(--amber-light); color: var(--amber); border-radius: 10px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <h4 style="font-size: 1rem; color: var(--text); margin-bottom: 0.25rem;">Progreso</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Métricas diarias</p>
+            </a>
+
+            <a href="{{ url_for('achievements.index') }}" class="card card-interactive" style="text-decoration: none; text-align: center; padding: 1.5rem 1rem;">
+                <div style="width: 44px; height: 44px; background: var(--purple-light); color: var(--secondary); border-radius: 10px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                        <path d="M4 22h16"></path>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                    </svg>
+                </div>
+                <h4 style="font-size: 1rem; color: var(--text); margin-bottom: 0.25rem;">Logros</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Reconocimientos</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Progreso de Hoy y Tareas Recientes -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <!-- Widget Progreso de Hoy -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.15rem;">Progreso de Hoy</h3>
+                <a href="{{ url_for('progress.index') }}" style="color: var(--primary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">
+                    Actualizar →
+                </a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; text-align: center; margin-bottom: 1.25rem;">
+                <div style="background: var(--bg); padding: 0.85rem 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <div style="font-size: 1.35rem; font-weight: 700; color: var(--primary);">
+                        {{ progreso_hoy.tareas_completadas if progreso_hoy else 0 }}
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Tareas</div>
+                </div>
+                <div style="background: var(--bg); padding: 0.85rem 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <div style="font-size: 1.35rem; font-weight: 700; color: var(--emerald);">
+                        {{ progreso_hoy.minutos_estudio if progreso_hoy else 0 }}
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Minutos</div>
+                </div>
+                <div style="background: var(--bg); padding: 0.85rem 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <div style="font-size: 1.35rem; font-weight: 700; color: var(--amber);">
+                        {{ progreso_hoy.ejercicios_completados if progreso_hoy else 0 }}
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Ejercicios</div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+                Mantén un ritmo de estudio constante para activar las recompensas de concentración diaria.
+            </p>
+        </div>
+
+        <!-- Widget Tareas Pendientes -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.15rem;">Tareas Principales</h3>
+                <a href="{{ url_for('tasks.index') }}" style="color: var(--primary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">
+                    Ver Todas →
+                </a>
+            </div>
+
+            {% if not tareas %}
+                <div style="text-align: center; padding: 1.5rem 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                    No tienes tareas pendientes actualmente.
+                    <div style="margin-top: 0.75rem;">
+                        <a href="{{ url_for('tasks.index') }}" class="btn-sm btn-primary" style="display: inline-block;">+ Crear Tarea</a>
+                    </div>
+                </div>
+            {% else %}
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    {% for t in tareas[:4] %}
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <span style="font-size: 0.9rem; font-weight: 500; {% if t.estado == 'completada' %}text-decoration: line-through; color: var(--text-muted);{% endif %}">
+                                    {{ t.nombre }}
+                                </span>
+                            </div>
+                            <span class="badge {% if t.prioridad == 'alta' %}badge-rose{% elif t.prioridad == 'media' %}badge-indigo{% else %}badge-gray{% endif %}">
+                                {{ t.prioridad|capitalize }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

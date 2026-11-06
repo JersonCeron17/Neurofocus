@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Actividad — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 650px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>Editar Actividad</h2>
+        <a href="{{ url_for('calendar.index') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+            ← Volver al Calendario
+        </a>
+    </div>
+
+    <div class="card">
+        <form method="POST" action="{{ url_for('calendar.editar', id_actividad=actividad.id_actividad) }}">
+            <div class="form-group">
+                <label for="titulo">Título de la actividad *</label>
+                <input type="text" id="titulo" name="titulo" value="{{ actividad.titulo }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <input type="text" id="descripcion" name="descripcion" value="{{ actividad.descripcion or '' }}">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="fecha_inicio">Fecha y hora de inicio *</label>
+                    <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" value="{{ actividad.fecha_inicio.strftime('%Y-%m-%dT%H:%M') if actividad.fecha_inicio.strftime is defined else actividad.fecha_inicio }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_fin">Fecha y hora de fin</label>
+                    <input type="datetime-local" id="fecha_fin" name="fecha_fin" value="{{ actividad.fecha_fin.strftime('%Y-%m-%dT%H:%M') if actividad.fecha_fin and actividad.fecha_fin.strftime is defined else actividad.fecha_fin or '' }}">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="tipo">Tipo de actividad</label>
+                    <select id="tipo" name="tipo" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem;">
+                        {% for t in tipos %}
+                            <option value="{{ t }}" {% if actividad.tipo == t %}selected{% endif %}>
+                                {{ t|capitalize }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_tarea">Vincular a Tarea</label>
+                    <select id="id_tarea" name="id_tarea" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem;">
+                        <option value="">-- Ninguna --</option>
+                        {% for tar in tareas %}
+                            <option value="{{ tar.id_tarea }}" {% if actividad.id_tarea == tar.id_tarea %}selected{% endif %}>
+                                {{ tar.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn-primary" style="flex: 1;">
+                    Guardar Cambios
+                </button>
+                <a href="{{ url_for('calendar.index') }}" style="display: inline-block; padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--text-muted); font-weight: 500; text-align: center;">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

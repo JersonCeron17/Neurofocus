@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Cuenta — NeuroFocus{% endblock %}
+
+{% block content %}
+<div class="container-narrow">
+    <div class="card">
+        <h2 style="text-align: center; margin-bottom: 0.5rem;">Crea tu cuenta</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">
+            Únete a NeuroFocus para organizar tus estudios y potenciar tu concentración.
+        </p>
+
+        <form action="{{ url_for('auth.registro') }}" method="POST" autocomplete="off">
+            <div class="form-group">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" value="{{ nombre or '' }}" placeholder="Ej. Alex Gómez" required maxlength="100">
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo" value="{{ correo or '' }}" placeholder="estudiante@ejemplo.com" required maxlength="150">
+            </div>
+
+            <div class="form-group">
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" name="contrasena" placeholder="Mínimo 6 caracteres" required minlength="6">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmar_contrasena">Confirmar contraseña</label>
+                <input type="password" id="confirmar_contrasena" name="confirmar_contrasena" placeholder="Repite tu contraseña" required minlength="6">
+            </div>
+
+            <button type="submit" class="btn-primary">Crear Cuenta</button>
+        </form>
+
+        <div class="auth-footer">
+            ¿Ya tienes una cuenta? <a href="{{ url_for('auth.login') }}">Inicia sesión</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

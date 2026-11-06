@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Ejercicios de Concentración — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 850px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h2>Ejercicios de Concentración</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Entrena tu atención selectiva, memoria de trabajo y foco cognitivo.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{{ url_for('exercises.mis_resultados') }}" class="btn-primary" style="text-decoration: none; padding: 0.5rem 1rem; width: auto; font-size: 0.9rem; background: #059669;">
+                Mis Resultados
+            </a>
+            <a href="{{ url_for('main.dashboard') }}" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 500; align-self: center;">
+                ← Panel
+            </a>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+        {% for e in ejercicios %}
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                        <h3 style="font-size: 1.15rem; color: var(--text);">{{ e.titulo }}</h3>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        <span style="background: #EEF2FF; color: var(--primary); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 9999px;">
+                            {{ e.categoria|capitalize }}
+                        </span>
+                        <span style="background: #FEF3C7; color: #92400E; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 9999px;">
+                            {{ e.dificultad|capitalize }}
+                        </span>
+                    </div>
+
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                        {{ e.descripcion }}
+                    </p>
+                </div>
+
+                <a href="{{ url_for('exercises.detalle', id_ejercicio=e.id_ejercicio) }}" class="btn-primary" style="text-align: center; text-decoration: none; display: block;">
+                    Iniciar Ejercicio
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

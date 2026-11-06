@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Progreso — NeuroFocus{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>Progreso del {{ prog.fecha }}</h2>
+        <a href="{{ url_for('progress.index') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+            ← Volver al Progreso
+        </a>
+    </div>
+
+    <div class="card">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; margin-bottom: 1.5rem;">
+            <div style="background: #F3F4F6; padding: 1rem; border-radius: 8px;">
+                <div style="font-size: 1.75rem; font-weight: 700; color: #4F46E5;">{{ prog.tareas_completadas }}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Tareas</div>
+            </div>
+            <div style="background: #F3F4F6; padding: 1rem; border-radius: 8px;">
+                <div style="font-size: 1.75rem; font-weight: 700; color: #059669;">{{ prog.minutos_estudio }}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Minutos</div>
+            </div>
+            <div style="background: #F3F4F6; padding: 1rem; border-radius: 8px;">
+                <div style="font-size: 1.75rem; font-weight: 700; color: #D97706;">{{ prog.ejercicios_completados }}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Ejercicios</div>
+            </div>
+        </div>
+
+        <a href="{{ url_for('progress.index') }}" class="btn-primary" style="text-align: center; text-decoration: none; display: block;">
+            Volver a Mi Progreso
+        </a>
+    </div>
+</div>
+{% endblock %}
